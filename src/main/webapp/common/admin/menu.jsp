@@ -47,7 +47,7 @@
             <b class="arrow"></b>
             <ul class="submenu">
                 <li>
-                    <a href="#">
+                    <a href="/admin/news">
                         <i class="menu-icon fa fa-caret-right"></i>
                         DS bài viết
                     </a>

@@ -13,16 +13,16 @@
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
-                <c:if test="${not empty USERMODEL}">
+                <c:if test="${not empty USER}">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Welcome, ${USERMODEL.fullName}</a>
+                        <a class="nav-link" href="#">Welcome, ${USER.userName}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/thoat?action=logout"/>">Thoát</a>
+                        <a class="nav-link" href="<c:url value="/logout?action=logout"/>">Thoát</a>
                     </li>
                 </c:if>
 
-                <c:if test="${empty USERMODEL}">
+                <c:if test="${empty USER}">
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value="/login"/>">Đăng nhập</a>
                     </li>

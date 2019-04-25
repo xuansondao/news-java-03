@@ -3,6 +3,7 @@ package model;
 import java.sql.Timestamp;
 
 public class NewsModel extends AbtractModel {
+
     private String title;
     private String shortDescription;
     private String content;

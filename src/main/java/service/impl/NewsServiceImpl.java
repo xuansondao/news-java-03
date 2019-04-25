@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class NewsServiceImpl implements INewsService {
 
@@ -35,5 +36,10 @@ public class NewsServiceImpl implements INewsService {
 //        newsModel.setCreatedBy(userModel.getUserName());
 
         newsDAO.insertNews(newsModel);
+    }
+
+    @Override
+    public List<NewsModel> findAll() {
+        return newsDAO.getAll();
     }
 }

@@ -8,6 +8,7 @@ import service.IUserService;
 import service.impl.RoleServiceImpl;
 import service.impl.UserServiceImpl;
 import utils.MapClientToServerUtil;
+import utils.SessionUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet(urlPatterns = {"/login","/logout"})
 public class LoginController extends HttpServlet {
 
     private IUserService userService;
@@ -31,6 +32,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String message = req.getParameter("message");
+        String action = req.getParameter("action");
         if (message != null ) {
             if ( message.equals("loginError"))
                 req.setAttribute("message", "Tài khoản hoặc mật khẩu bị sai");
@@ -39,8 +41,14 @@ public class LoginController extends HttpServlet {
             else if (message.equals("dontLogin"))
                 req.setAttribute("message", "Bạn chưa đăng nhập");
         }
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/views/login.jsp");
-        requestDispatcher.forward(req, resp);
+        if(action != null && action.equals("logout")){
+            resp.sendRedirect("/trangChu");
+            SessionUtil.removeValue(req,"USER");
+        }else {
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/views/login.jsp");
+            requestDispatcher.forward(req, resp);
+        }
+
     }
 
     @Override

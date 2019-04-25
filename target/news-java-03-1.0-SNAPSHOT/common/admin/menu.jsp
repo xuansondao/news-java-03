@@ -38,7 +38,7 @@
     </div>
     <ul class="nav nav-list">
         <li>
-            <a href="#" class="dropdown-toggle">
+            <a href="/admin/news" class="dropdown-toggle">
                 <i class="menu-icon fa fa-list"></i>
                 <span class="menu-text"></span>
                 Quản lý bài viết
