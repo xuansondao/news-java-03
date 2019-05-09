@@ -38,7 +38,7 @@
     </div>
     <ul class="nav nav-list">
         <li>
-            <a href="/admin/news" class="dropdown-toggle">
+            <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fa-list"></i>
                 <span class="menu-text"></span>
                 Quản lý bài viết
@@ -47,7 +47,7 @@
             <b class="arrow"></b>
             <ul class="submenu">
                 <li>
-                    <a href="#">
+                    <a href="/admin/news?page=1&size=2">
                         <i class="menu-icon fa fa-caret-right"></i>
                         DS bài viết
                     </a>

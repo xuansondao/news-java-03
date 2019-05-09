@@ -1,9 +1,11 @@
 package controller.admin.api;
 
 import model.NewsModel;
+import model.UserModel;
 import service.INewsService;
 import service.impl.NewsServiceImpl;
 import utils.ModelToJsonUtil;
+import utils.SessionUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +36,16 @@ public class NewsAPIController extends HttpServlet implements Serializable {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+        req.setCharacterEncoding("utf-8");
+        resp.setContentType("application/json");
+        NewsModel news = ModelToJsonUtil
+                .of(req.getReader())
+                .toModel(NewsModel.class);
+        UserModel user = (UserModel) SessionUtil
+                .getValue(req,"USER");
+        news.setModifiedBy(user.getUserName());
+
+        newsService.updateNews(news.getId(),news);
     }
 
     @Override

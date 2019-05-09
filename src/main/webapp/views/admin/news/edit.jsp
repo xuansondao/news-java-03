@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp" %>
+<c:url var="ApiUrl" value="/api/admin/news"/>
 <html>
 <head>
     <title>Chỉnh sửa bài viết</title>
@@ -34,8 +35,16 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right">Thể loại</label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="code" name="code">
+                                <select class="form-control" id="code" name="categoryId">
                                     <option value="">Chọn thể loại bài viết</option>
+                                    <c:forEach var="item" items="${categories}">
+                                        <c:if test="${model.categoryId == item.id}">
+                                            <option value="${item.id}" selected="selected">${item.name}</option>
+                                        </c:if>
+                                        <c:if test="${model.categoryId != item.id}">
+                                            <option value="${item.id}">${item.name}</option>
+                                        </c:if>
+                                    </c:forEach>
                                 </select>
                             </div>
                         </div>
@@ -44,7 +53,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right">Tiêu đề</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="title" name="title" value=""/>
+                                <input type="text" class="form-control" id="title" name="title" value="${model.title}"/>
                             </div>
                         </div>
                         <br>
@@ -53,7 +62,7 @@
                             <label class="col-sm-3 control-label no-padding-right">Hình đại diện</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="thumbnail" name="thumbnail"
-                                       value=""/>
+                                       value="${model.thumbnail}"/>
                             </div>
                         </div>
                         <br>
@@ -62,7 +71,7 @@
                             <label class="col-sm-3 control-label no-padding-right">Mô tả ngắn</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="shortDescription" name="shortDescription"
-                                       value=""/>
+                                       value="${model.shortDescription}"/>
                             </div>
                         </div>
                         <br>
@@ -71,30 +80,30 @@
                             <label class="col-sm-3 control-label no-padding-right">Nội dung</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="content" name="content"
-                                       value=""/>
+                                       value="${model.content}"/>
                             </div>
                         </div>
                         <br>
                         <br>
                         <div class="form-group">
 
-                            <input type="hidden" class="form-control" id="id" name="id"/>
+                            <input type="hidden" class="form-control" id="id" name="id" value="${model.id}"/>
 
                         </div>
                         <br>
                         <br>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <%--<c:if test="${not empty model.id}">--%>
-                                    <%--<input type="button" class="btn btn-white btn-warning btn-bold"--%>
-                                           <%--value="Cập nhật bài viết"--%>
-                                           <%--id="btnAddOrUpdate"/>--%>
-                                <%--</c:if>--%>
-                                <%--<c:if test="${empty model.id}">--%>
-                                    <%--<input type="button" class="btn btn-white btn-warning btn-bold"--%>
-                                           <%--value="Thêm mới bài viết"--%>
-                                           <%--id="btnAddOrUpdate"/>--%>
-                                <%--</c:if>--%>
+                                <c:if test="${not empty model.id}">
+                                    <input type="button" class="btn btn-white btn-warning btn-bold"
+                                           value="Cập nhật bài viết"
+                                           id="btnAddOrUpdate"/>
+                                </c:if>
+                                <c:if test="${empty model.id}">
+                                    <input type="button" class="btn btn-white btn-warning btn-bold"
+                                           value="Thêm mới bài viết"
+                                           id="btnAddOrUpdate"/>
+                                </c:if>
                             </div>
                         </div>
                     </form>
@@ -103,5 +112,54 @@
         </div>
     </div>
 </div>
+<script>
+    $('#btnAddOrUpdate').click(function (e) {
+        e.preventDefault();
+        var data = {};
+        var formData = $('#formUpdateOrCreate').serializeArray();
+        $.each(formData, function (i, v) {
+            data["" + v.name + ""] = v.value;
+        });
+
+        var id = $('#id').val();
+        if (id == '') {
+            addNews(data);
+        } else {
+            updateNews(data);
+        }
+    });
+
+    function addNews(data) {
+        $.ajax({
+            url: ('${ApiUrl}'),
+            type: 'POST',
+            contentType:'application/json',
+            data: JSON.stringify(data),
+            dataType: 'html',
+            success: function () {
+                window.location.href = 'http://localhost:8080/admin/news';
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function updateNews(data) {
+        $.ajax({
+            url: ('${ApiUrl}'),
+            type: 'PUT',
+            contentType:'application/json',
+            data: JSON.stringify(data),
+            dataType: 'html',
+            success: function () {
+                window.location.href = 'http://localhost:8080/admin/news';
+            },
+            error: function () {
+
+            }
+        });
+    }
+</script>
 </body>
 </html>

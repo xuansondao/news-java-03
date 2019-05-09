@@ -5,6 +5,7 @@ import dao.INewsDAO;
 import dao.impl.NewsDaoImpl;
 import model.NewsModel;
 import model.UserModel;
+import paging.PageAble;
 import service.INewsService;
 import utils.SessionUtil;
 
@@ -19,27 +20,41 @@ public class NewsServiceImpl implements INewsService {
     private INewsDAO newsDAO;
 
     public NewsServiceImpl(){
-        try {
-            newsDAO = IGenericDAO.getInstance(NewsDaoImpl.class);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+       this.newsDAO = new NewsDaoImpl();
     }
 
     @Override
     public void insertNews(HttpServletRequest request,NewsModel newsModel) {
         Date date = new Date();
         newsModel.setCreatedDate(new Timestamp(date.getTime()));
-//        UserModel userModel = (UserModel) SessionUtil.getValue(request,"USER");
-//        newsModel.setCreatedBy(userModel.getUserName());
+        UserModel userModel = (UserModel) SessionUtil.getValue(request,"USER");
+        newsModel.setCreatedBy(userModel.getUserName());
 
         newsDAO.insertNews(newsModel);
     }
 
     @Override
-    public List<NewsModel> findAll() {
-        return newsDAO.getAll();
+    public List<NewsModel> findAll(PageAble pageAble) {
+        return newsDAO.getAll(pageAble);
+    }
+
+    @Override
+    public NewsModel findNewsById(long id) {
+        return newsDAO.findNewsById(id);
+    }
+
+    @Override
+    public void updateNews(Long id, NewsModel updateNews) {
+        NewsModel oldNews = newsDAO.findNewsById(id);
+        updateNews.setCreatedDate(oldNews.getCreatedDate());
+        updateNews.setCreatedBy(oldNews.getCreatedBy());
+        updateNews.setModifiedDate(new Timestamp(System.currentTimeMillis()));
+
+        newsDAO.updateNews(id, updateNews);
+    }
+
+    @Override
+    public long countAllNews() {
+        return newsDAO.countAllNews();
     }
 }

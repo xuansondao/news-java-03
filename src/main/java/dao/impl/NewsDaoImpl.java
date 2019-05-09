@@ -3,6 +3,7 @@ package dao.impl;
 import dao.INewsDAO;
 import mapper.NewsMapper;
 import model.NewsModel;
+import paging.PageAble;
 
 import java.util.List;
 
@@ -39,8 +40,12 @@ public class NewsDaoImpl extends AbtractDAO<NewsModel> implements INewsDAO {
         );
     }
 
-    public List<NewsModel> getAll() {
+    public List<NewsModel> getAll(PageAble pageAble) {
         String sql = "SELECT * FROM news";
+        if (pageAble.getPage() != 0 && pageAble.getLimit() != 0){
+//            sql += " LIMIT " + pageAble.getObset() + "," +pageAble.getLimit();
+            sql += " LIMIT " + pageAble.getLimit() + " OFFSET " +pageAble.getObset();
+        }
         return findByProperties(sql, new NewsMapper());
     }
 
@@ -49,5 +54,11 @@ public class NewsDaoImpl extends AbtractDAO<NewsModel> implements INewsDAO {
         String sql = "SELECT * FROM news WHERE id = ?";
         List<NewsModel> newsModels = findByProperties(sql, new NewsMapper(), id);
         return newsModels.isEmpty() ? null : newsModels.get(0);
+    }
+
+    @Override
+    public long countAllNews() {
+        String sql = "SELECT COUNT(*) FROM news";
+        return countAll(sql);
     }
 }

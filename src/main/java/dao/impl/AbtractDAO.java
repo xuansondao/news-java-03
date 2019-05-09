@@ -110,6 +110,40 @@ public class AbtractDAO<T> implements IGenericDAO<T> {
         return results;
     }
 
+    @Override
+    public long countAll(String sql, Object... parameters) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            int count = 0;
+            connection = getConnection();
+            statement = connection.prepareStatement(sql);
+            setParameters(statement, parameters);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+            return count;
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                return 0;
+            }
+        }
+    }
+
     private void setParameters(PreparedStatement ps, Object...parameters) throws SQLException {
         for (int i = 0; i < parameters.length; i++) {
             int index = i + 1;

@@ -2,8 +2,8 @@ package model;
 
 import java.sql.Timestamp;
 
-public class NewsModel extends AbtractModel {
-
+public class NewsModel  {
+    private Long id;
     private String title;
     private String shortDescription;
     private String content;
@@ -119,5 +119,13 @@ public class NewsModel extends AbtractModel {
                 ", status='" + status + '\'' +
                 ", categoryId=" + categoryId +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
